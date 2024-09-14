@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerShell Lab Tutorial: Encrypting and Protecting Confidential Data</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(90deg, #007bff, #6610f2); /* Gradient for a modern look */
+            padding: 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #007bff;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #17a2b8;
+        }
+
+        p, li {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        code {
+            display: block;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            margin: 10px 0;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        ol li {
+            margin: 10px 0;
+        }
+
+        .video-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            max-width: 720px;
+            border-radius: 8px;
+            border: 0;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- PowerShell logo used instead of house logo -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/PowerShell_5.0_icon.png" alt="PowerShell logo" class="icon">
+        <h1>PowerShell Lab Tutorial</h1>
+        <p>Encrypting and Protecting Confidential Data</p>
+    </header>
+
+    <div class="container">
+        <h2>Welcome!</h2>
+        <p>Welcome to my PowerShell tutorial on protecting confidential data through encryption and secure handling! In this lab, I'll demonstrate how to safeguard sensitive information step by step using PowerShell. This is an essential skill for IT professionals working in cybersecurity or systems administration.</p>
+
+        <h2>Lab Overview</h2>
+        <p>Here’s a breakdown of the steps and key concepts we’ll cover in the tutorial:</p>
+
+        <h3>Steps Covered:</h3>
+        <ol>
+            <li><strong>Create the Lab Directory:</strong>
+                <p>Start by setting up a secure directory where we’ll store the files.</p>
+                <code>New-Item -Path "C:\Lab\SensitiveData" -ItemType Directory</code>
+            </li>
+            <li><strong>Create and View Sensitive Data:</strong>
+                <p>Create a sample text file with confidential information and view its content.</p>
+                <p>Example content: "Jermaine Forbes is actually Thor, the strongest Avenger."</p>
+                <code>
+                    Set-Content -Path "C:\Lab\SensitiveData\secret.txt" -Value "Jermaine Forbes is actually Thor, the strongest Avenger"<br>
+                    Get-Content -Path "C:\Lab\SensitiveData\secret.txt"
+                </code>
+            </li>
+            <li><strong>Encrypt the Sensitive Data:</strong>
+                <p>Encrypt the data using a 256-bit AES key to ensure confidentiality. You’ll also learn how to store the encryption key and Initialization Vector (IV) for later decryption.</p>
+                <code>
+                    $aes = New-Object System.Security.Cryptography.AesManaged<br>
+                    $aes.KeySize = 256<br>
+                    $key = $aes.Key<br>
+                    $iv = $aes.IV
+                </code>
+            </li>
+            <li><strong>Decrypt the Sensitive Data:</strong>
+                <p>After encryption, use the saved key and IV to decrypt the file and verify the content.</p>
+                <code>
+                    $aes.Key = $key<br>
+                    $aes.IV = $iv
+                </code>
+            </li>
+            <li><strong>Securely Handle Data in Memory:</strong>
+                <p>Sensitive data should be securely stored in memory using PowerShell’s SecureString to prevent unauthorized access.</p>
+                <code>
+                    $secureData = ConvertTo-SecureString -String "SensitiveData" -AsPlainText -Force
+                </code>
+            </li>
+            <li><strong>Clean Up:</strong>
+                <p>Finally, securely delete all files created during the lab to maintain a tidy and secure environment.</p>
+                <code>
+                    Remove-Item -Path "C:\Lab\SensitiveData" -Recurse
+                </code>
+            </li>
+        </ol>
+
+        <h3>Key PowerShell Commands:</h3>
+        <ul>
+            <li><strong>New-Item:</strong> Used to create a new file or directory.</li>
+            <li><strong>Set-Content:</strong> Inserts or writes data into a file.</li>
+            <li><strong>Get-Content:</strong> Reads and displays the content of a file.</li>
+            <li><strong>System.Security.Cryptography.AesManaged:</strong> Provides AES encryption and decryption functionality.</li>
+            <li><strong>ConvertTo-SecureString / ConvertFrom-SecureString:</strong> Commands to securely handle sensitive data in memory.</li>
+        </ul>
+
+        <div class="video-container">
+            <h2>Watch the Video Tutorial</h2>
+            <iframe src="https://www.youtube.com/embed/0NHpO4yjStw?start=402" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <a href="#steps" class="button">Get Started with the Lab!</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Jermaine Forbes | PowerShell Encryption Lab</p>
+    </footer>
+
+</body>
+</html>
